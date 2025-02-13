@@ -11,7 +11,6 @@ import google.generativeai as genai
 import tempfile
 from datetime import datetime
 
-# Create your views here.
 
 GEMINI_API_KEY='AIzaSyBnU9KrB5uXJTIZJefKKgfQfP6q3s7zDRs'
 
@@ -67,7 +66,6 @@ def up_images(request):
             if not name or not image or not price or not cat:
                 return JsonResponse({'error': 'All fields are required.'}, status=400)
 
-            # Save the product to the database
             img_model = PRODUCT(name=name, image=image, price=price, categorie=cat)
             img_model.save()
 
@@ -186,11 +184,9 @@ def get_booked_appo_admin(request):
 def soil_test(request):
     if request.method == 'POST':
         try:
-            # Load data from the request body
             data = json.loads(request.body)
             print(data)
 
-            # Extract fields from the received data
             user_name = data.get('user_name')
             admin_name = data.get('admin')
             date = data.get('date')
@@ -205,7 +201,6 @@ def soil_test(request):
             Phosphorus_Content = data.get('Phosphorus_Content')
             Potassium_Content = data.get('Potassium_Content')
 
-            # Create a dictionary with relevant data for the AI model
             data123 = {
                 "Water_Percentage": Water_Percentage,
                 "Air_Percentage": Air_Percentage,
@@ -219,7 +214,6 @@ def soil_test(request):
                 "Potassium_Content": Potassium_Content,
             }
 
-            # Set up the AI model
             genai.configure(api_key=GEMINI_API_KEY)
             generation_config = {
                 "temperature": 0,
@@ -243,22 +237,18 @@ def soil_test(request):
                 """,
             )
 
-            # Start chat and send message
             history = []
             chat_session = model.start_chat(history=history)
             response = chat_session.send_message(json.dumps(data123))
 
-            # Parse the response text to JSON
             response_json = json.loads(response.text)
 
-            # Extract the data from the AI model's response
             soil_condition = response_json['soil_condition']
             soil_fertility = int(response_json['soil_fertility_percentage'])
             recommended_crop = response_json['recommended_crop']
             nutrients_needed = response_json['nutrients_needed']
             other_suggestions = response_json['other_suggestions']
 
-            # Insert data into APPOINTMENT_DETAILS model
             APPOINTMENT_DETAILS.objects.create(
                 admin_name=admin_name,
                 user_name=user_name,
@@ -281,11 +271,10 @@ def soil_test(request):
 @csrf_exempt
 def get_data_app(request,appo_user, appo_admin, appo_date):
     try:
-        if 'T' in appo_date:  # Check if 'T' exists (ISO date format)
+        if 'T' in appo_date:
             parsed_date = datetime.strptime(appo_date.split('T')[0], '%Y-%m-%d').date()
         else:
             parsed_date = datetime.strptime(appo_date, '%Y-%m-%d').date()
-        # Fetch the specific appointment details from the database
         appointment = APPOINTMENT_DETAILS.objects.get(admin_name=appo_admin,user_name=appo_user,appointment_date=parsed_date.isoformat())
         data = {
             'admin_name': appointment.admin_name,
@@ -308,25 +297,19 @@ def upload_crop_photo(request):
 
         def upload_to_gemini(file):
             """Uploads the given file to Gemini API."""
-            # Use a temporary file to save the uploaded image
+
             with tempfile.NamedTemporaryFile(delete=False) as temp_file:
                 for chunk in file.chunks():
                     temp_file.write(chunk)
                 temp_file_path = temp_file.name
 
-            # Upload the temporary file to Gemini
             gemini_file = genai.upload_file(temp_file_path, mime_type="image/jpeg")
-
-            # Remove the temporary file
             os.remove(temp_file_path)
 
             return gemini_file
 
         try:
-            # Configure Gemini API
             genai.configure(api_key=GEMINI_API_KEY)
-
-            # Define generation settings
             generation_config = {
                 "temperature": 0,
                 "top_p": 0.95,
@@ -334,8 +317,6 @@ def upload_crop_photo(request):
                 "max_output_tokens": 8192,
                 "response_mime_type": "application/json",
             }
-
-            # Define the model and instructions
             model = genai.GenerativeModel(
                 model_name="gemini-1.5-pro",
                 generation_config=generation_config,
@@ -345,19 +326,11 @@ def upload_crop_photo(request):
                     "how it happened, and the cure."
                 ),
             )
-
-            # Upload the image to Gemini
             gemini_file = upload_to_gemini(image)
-
-            # Start a chat session with the model
             chat_session = model.start_chat()
-
-            # Send the uploaded image's URI to Gemini for analysis
             response = chat_session.send_message(f"Analyze this image for disease: {gemini_file.uri}")
             print(response.text)
-            # Parse the response as JSON
             response_json = json.loads(response.text)
-            # response_json.append('image',image)
             return JsonResponse(response_json, safe=False)
 
         except json.JSONDecodeError:
@@ -521,7 +494,6 @@ def get_weather_info(request):
                 'wind_condition': api_data.get('wind_condition'),
                 'humidity': api_data.get('humidity'),
                 'weather_prediction': api_data.get('weather_prediction'),
-                
             }
 
             return JsonResponse(weather_info)
