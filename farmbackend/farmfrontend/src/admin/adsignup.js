@@ -44,7 +44,7 @@ function SIGNUP1(){
 
         useEffect(() => {
             const getCsrfToken = async () => {
-              const response = await fetch('/get-csrf-token/');
+              const response = await fetch('http://localhost:8000/api/get-csrf-token/');
               const data = await response.json();
               setCsrfToken(data.csrfToken);
             };
@@ -64,13 +64,13 @@ function SIGNUP1(){
                     <div className="signup-section">
                         <h2>Sign Up</h2>
                         <form onSubmit={handlesubmit} className="form1">
-                            <label for="username" className="label1">Admin name</label>
+                            <label htmlFor="username" className="label1">Admin name</label>
                             <input type="text" id="username" className="input1" name="username" placeholder="Enter your admin name" onChange={(e)=>{setinfoname(e.target.value)}} required/>
 
-                            <label for="email" className="label1">Email</label>
+                            <label htmlFor="email" className="label1">Email</label>
                             <input type="email" id="email" className="input1" name="email" placeholder="Enter your email" onChange={(e)=>{setinfoemail(e.target.value)}}  required/>
 
-                            <label for="password" className="label1">Password</label>
+                            <label htmlFor="password" className="label1">Password</label>
                             <input type="password" id="password" className="input1" name="password" placeholder="Enter your password" onChange={(e)=>{setinfopassword(e.target.value)}}  required/>
                             
                             <button type="submit" className="button1">Sign Up</button>

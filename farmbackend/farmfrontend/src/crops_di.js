@@ -23,7 +23,7 @@ function CROP_DI() {
 
         useEffect(() => {
             const getCsrfToken = async () => {
-              const response = await fetch('/get-csrf-token/');
+              const response = await fetch('http://localhost:8000/api/get-csrf-token/');
               const data = await response.json();
               setCsrfToken(data.csrfToken);
             };
@@ -43,6 +43,9 @@ function CROP_DI() {
 
         fetch('http://localhost:8000/api/crop_disease/', {
             method: 'POST',
+            headers : {
+                'X-CSRFToken': csrfToken,
+            },
             body: formData33,
         })
             .then(response => response.json())
@@ -88,6 +91,7 @@ function CROP_DI() {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'X-CSRFToken': csrfToken,
             },
             body: JSON.stringify(formData)
         });
@@ -104,8 +108,6 @@ function CROP_DI() {
     const closeTable = () => {
         setRecommendations(null);
     };
-
-    console.log(recommendations)
 
     const [cropInfoFormVisible, setCropInfoFormVisible] = useState(false); 
     const [cropName, setCropName] = useState('');
@@ -235,7 +237,7 @@ function CROP_DI() {
                             <tbody>
                                 <tr>
                                     <td><strong>Disease</strong></td>
-                                    <td>{cropData.disease}</td>
+                                    <td>{cropData.name}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Cause</strong></td>
@@ -354,7 +356,7 @@ function CROP_DI() {
                             <tbody>
                                 {recommendations.map((rec, index) => (
                                     <tr key={index}>
-                                        <td className="td1234">{rec.crop}</td>
+                                        <td className="td1234">{rec.recommended_crop}</td>
                                         <td className="td1234">{rec.reason}</td>
                                         <td className="td1234">{rec.soil_preparation}</td>
                                     </tr>

@@ -12,6 +12,7 @@ function UP_IMG() {
     const query = new URLSearchParams(useLocation().search);
     const adminname = query.get('username');
     const adminemail = query.get('email');
+    const [csrfToken, setCsrfToken] = useState('');
 
     const images = [pc2,pc1];
 
@@ -25,11 +26,20 @@ function UP_IMG() {
         setCurrentIndex(newIndex);
     };
 
+    useEffect(() => {
+        const getCsrfToken = async () => {
+            const response = await fetch('http://localhost:8000/api/get-csrf-token/');
+            const data = await response.json();
+            setCsrfToken(data.csrfToken);
+        };
+        getCsrfToken();
+    }, []);
+
     const [images1, setImages1] = useState([]);
     useEffect(() => {
         const formData1 = new FormData();
         formData1.append('categorie','FRUIT')
-        fetch('http://localhost:8000/api/images/get/',{method:'POST',body:formData1,})
+        fetch('http://localhost:8000/api/images/get/',{method:'POST', headers : {'X-CSRFToken': csrfToken,} ,body:formData1,})
             .then(response => response.json())
             .then(data => setImages1(data))
             .catch(error => console.error('Error fetching images:', error)); 
@@ -39,7 +49,7 @@ function UP_IMG() {
     useEffect(() => {
         const formData1 = new FormData();
         formData1.append('categorie','VEGETABLE')
-        fetch('http://localhost:8000/api/images/get/',{method:'POST',body:formData1,})
+        fetch('http://localhost:8000/api/images/get/',{method:'POST',headers : {'X-CSRFToken': csrfToken,} ,body:formData1,})
             .then(response => response.json())
             .then(data => setImages2(data))
             .catch(error => console.error('Error fetching images:', error)); 
@@ -49,7 +59,7 @@ function UP_IMG() {
     useEffect(() => {
         const formData1 = new FormData();
         formData1.append('categorie','GRAIN')
-        fetch('http://localhost:8000/api/images/get/',{method:'POST',body:formData1,})
+        fetch('http://localhost:8000/api/images/get/',{method:'POST',headers : {'X-CSRFToken': csrfToken,} ,body:formData1,})
             .then(response => response.json())
             .then(data => setImages3(data))
             .catch(error => console.error('Error fetching images:', error)); 
@@ -59,7 +69,7 @@ function UP_IMG() {
     useEffect(() => {
         const formData1 = new FormData();
         formData1.append('categorie','DRYFRUIT')
-        fetch('http://localhost:8000/api/images/get/',{method:'POST',body:formData1,})
+        fetch('http://localhost:8000/api/images/get/',{method:'POST',headers : {'X-CSRFToken': csrfToken,} ,body:formData1,})
             .then(response => response.json())
             .then(data => setImages4(data))
             .catch(error => console.error('Error fetching images:', error)); 
@@ -76,7 +86,7 @@ function UP_IMG() {
     };
 
     const handleUpload12 = (e) => {
-        e.preventDefault(); // Prevent page refresh on form submit
+        e.preventDefault(); 
         const formData33 = new FormData();
         formData33.append('image', image);
         formData33.append('name', proname);
@@ -85,12 +95,14 @@ function UP_IMG() {
 
         fetch('http://localhost:8000/api/images/', {
             method: 'POST',
+            headers : {
+                'X-CSRFToken': csrfToken,
+            },
             body: formData33,
         })
         .then(response => response.json())
         .then(data => {
             console.log("Product uploaded successfully:", data);
-            // Optionally reset form or fetch updated products
         })
         .catch(error => {
             console.error("There was an error uploading the image!", error);
@@ -111,9 +123,7 @@ function UP_IMG() {
     useEffect(() => {
         const interval = setInterval(() => {
             goToNext();
-        }, 2000); // 2000 milliseconds = 2 seconds
-
-        // Cleanup interval on component unmount
+        }, 2000);
         return () => clearInterval(interval);
     }, [currentIndex]);
 

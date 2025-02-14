@@ -29,7 +29,7 @@ function APPO() {
     // Fetch CSRF Token
     useEffect(() => {
         const getCsrfToken = async () => {
-            const response = await fetch('/get-csrf-token/');
+            const response = await fetch('http://localhost:8000/api/get-csrf-token/');
             const data = await response.json();
             setCsrfToken(data.csrfToken);
         };
@@ -74,7 +74,7 @@ function APPO() {
     const handleShowAppointments = () => {
         const formData = new FormData();
         formData.append('user_name', username);
-        fetch('http://localhost:8000/api/show_appo/', { method: 'POST', body: formData })
+        fetch('http://localhost:8000/api/show_appo/', { method: 'POST',headers : { 'X-CSRFToken': csrfToken, }, body: formData })
             .then(response => response.json())
             .then(data => setBookedAppo(data))
             .catch(error => console.error('Error fetching appointments:', error));
@@ -83,7 +83,13 @@ function APPO() {
 
     // Show appointment details
     const handleShowResult = (appo_user, appo_admin, appo_date) => {
-        fetch(`http://localhost:8000/api/appointment_details/${appo_user}/${appo_admin}/${appo_date}/`)
+        fetch(`http://localhost:8000/api/appointment_details/${appo_user}/${appo_admin}/${appo_date}/`,
+            {
+                headers : {
+                    'X-CSRFToken': csrfToken,
+                }
+            }
+        )
             .then(response => response.json())
             .then(data => setAppointmentDetails(data))
             .catch(error => console.error('Error fetching appointment details:', error));
@@ -93,6 +99,9 @@ function APPO() {
     const handleDeleteAppointment = (user_name, admin_name, date) => {
         fetch(`http://localhost:8000/api/delete_appo/${user_name}/${admin_name}/${date}/`, {
             method: 'DELETE',
+            headers : {
+                'X-CSRFToken': csrfToken,
+            }
         })
             .then(response => {
                 if (response.ok) {

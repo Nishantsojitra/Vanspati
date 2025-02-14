@@ -43,7 +43,7 @@ function LOGIN1(){
 
         useEffect(() => {
             const getCsrfToken = async () => {
-              const response = await fetch('/get-csrf-token/');
+              const response = await fetch('http://localhost:8000/api/get-csrf-token/');
               const data = await response.json();
               setCsrfToken(data.csrfToken);
             };
@@ -52,7 +52,7 @@ function LOGIN1(){
 
     return(
         <>
-        <div classNameName="ni">
+        <div className="">
             <div className="auth-container" >
                 <div className="welcome-section">
                     <img src={logo} style={{borderRadius:'50%',width:'150px',height:'150px'}}></img>

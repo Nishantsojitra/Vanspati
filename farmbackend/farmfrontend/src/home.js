@@ -160,9 +160,9 @@ function HOME(){
                     <h2 className="fade-in-text">About Vanspati Farms</h2>
                     <p className="fade-in-text">Vanspati is India's largest integrated platform for fruits and vegetables. Company via its unique inclusive partnership with farmers has built a strong capability over the years in areas of primary processing of F&V, semi-processed products like frozen & aseptic; processed products like fruit jams; tomato ketchup; fruit beverages and F&V waste processing under an integrated zero discharge processing facility.</p>
                     <p className="fade-in-text">Vanspati Farms began with the mission to ensure that the small-landholding farmers of India are given fair compensation for their produce and labour. This was to be achieved while ensuring that we adhere to global standards of agricultural practices, world-class infrastructure, international food safety standards, and the will to deliver safe, hygienic, and healthy food to our consumers.</p>
-                    <a href="" class="btn fade-in-text">Our Story</a>
+                    <a href="" className="btn fade-in-text">Our Story</a>
                 </div>
-                <div class="about-image slide-in-image">
+                <div className="about-image slide-in-image">
                     <img src={build1}/>
                 </div>
             </section>

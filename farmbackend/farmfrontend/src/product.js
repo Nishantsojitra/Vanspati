@@ -9,10 +9,10 @@ import pc2 from './img/productbanner1.jpg';
 function PRODUCT() {
     const images = [pc2, pc1];
     const [currentIndex, setCurrentIndex] = useState(0);
-    const [cartVisible, setCartVisible] = useState(false); // For showing/hiding cart
-    const [cartItems, setCartItems] = useState([]); // For storing cart items
-    const [showBuyOptions, setShowBuyOptions] = useState(false); // For displaying payment options
-    const [paymentMethod, setPaymentMethod] = useState(''); // Selected payment method
+    const [cartVisible, setCartVisible] = useState(false);
+    const [cartItems, setCartItems] = useState([]);
+    const [showBuyOptions, setShowBuyOptions] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('');
     const [formData, setFormData] = useState({ name: '', address: '', pincode: '', cardNumber: '', cvv: '' });
 
     const goToNext = () => {
@@ -33,7 +33,7 @@ function PRODUCT() {
         const fetchImages = (category) => {
             const formData = new FormData();
             formData.append('categorie', category);
-            fetch('http://localhost:8000/api/images/get/', { method: 'POST', body: formData })
+            fetch('http://localhost:8000/api/images/get/', { method: 'POST', headers : {'X-CSRFToken': csrfToken,} , body: formData })
                 .then(response => response.json())
                 .then(data => setCategoryImages(prev => ({ ...prev, [category]: data })))
                 .catch(error => console.error(`Error fetching ${category} images:`, error));
@@ -81,7 +81,7 @@ function PRODUCT() {
 
         fetch('http://localhost:8000/api/buy/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json','X-CSRFToken': csrfToken, },
             body: JSON.stringify(data)
         })
             .then(response => response.json())
@@ -96,11 +96,24 @@ function PRODUCT() {
     useEffect(() => {
         const interval = setInterval(() => {
             goToNext();
-        }, 2000); // 2000 milliseconds = 2 seconds
+        }, 2000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(interval);
     }, [currentIndex]);
+
+    const [csrfToken, setCsrfToken] = useState('');
+
+    useEffect(() => {
+        const getCsrfToken = async () => {
+            const response = await fetch('http://localhost:8000/api/get-csrf-token/', {
+                method: 'GET',
+                mode: 'cors',
+            });
+            const data = await response.json();
+            setCsrfToken(data.csrfToken);
+        };
+        getCsrfToken();
+    }, []);
 
     return (
         <>
@@ -121,7 +134,7 @@ function PRODUCT() {
                             <img src={`http://localhost:8000${image.image}`} alt="Product" />
                             <button className="buy-button" onClick={() => addToCart(image.name, image.price, image.categorie)}>Buy Now</button>
                         </div>
-                        <h3 style={{marginTop:'20px'}}>{image.name} SEEDS</h3>
+                        <h3 style={{ marginTop: '20px' }}>{image.name} SEEDS</h3>
                         <div className="price1">₹ {image.price} per kg</div>
                     </div>
                 ))}
@@ -135,7 +148,7 @@ function PRODUCT() {
                             <img src={`http://localhost:8000${image.image}`} alt="Product" />
                             <button className="buy-button" onClick={() => addToCart(image.name, image.price, image.categorie)}>Buy Now</button>
                         </div>
-                        <h3 style={{marginTop:'20px'}}>{image.name} SEEDS</h3>
+                        <h3 style={{ marginTop: '20px' }}>{image.name} SEEDS</h3>
                         <div className="price1">₹ {image.price} per kg</div>
                     </div>
                 ))}
@@ -149,7 +162,7 @@ function PRODUCT() {
                             <img src={`http://localhost:8000${image.image}`} alt="Product" />
                             <button className="buy-button" onClick={() => addToCart(image.name, image.price, image.categorie)}>Buy Now</button>
                         </div>
-                        <h3 style={{marginTop:'20px'}}>{image.name} SEEDS</h3>
+                        <h3 style={{ marginTop: '20px' }}>{image.name} SEEDS</h3>
                         <div className="price1">₹ {image.price} per kg</div>
                     </div>
                 ))}
@@ -163,7 +176,7 @@ function PRODUCT() {
                             <img src={`http://localhost:8000${image.image}`} alt="Product" />
                             <button className="buy-button" onClick={() => addToCart(image.name, image.price, image.categorie)}>Buy Now</button>
                         </div>
-                        <h3 style={{marginTop:'20px'}}>{image.name} SEEDS</h3>
+                        <h3 style={{ marginTop: '20px' }}>{image.name} SEEDS</h3>
                         <div className="price1">₹ {image.price} per kg</div>
                     </div>
                 ))}

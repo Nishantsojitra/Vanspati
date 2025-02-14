@@ -12,7 +12,7 @@ import tempfile
 from datetime import datetime
 
 
-GEMINI_API_KEY='AIzaSyBnU9KrB5uXJTIZJefKKgfQfP6q3s7zDRs'
+GEMINI_API_KEY='AIzaSyC8tJwh5taOMMwImn0JiA35pu_Uf-rFSlE'
 
 @csrf_exempt
 def signup(request):

@@ -13,7 +13,7 @@ function ADMIN_APPO(){
 
         useEffect(() => {
             const getCsrfToken = async () => {
-              const response = await fetch('/get-csrf-token/');
+              const response = await fetch('http://localhost:8000/api/get-csrf-token/');
               const data = await response.json();
               setCsrfToken(data.csrfToken);
             };
@@ -25,16 +25,16 @@ function ADMIN_APPO(){
         const handleappo = () => {
             const formData1 = new FormData();
             formData1.append('admin_name',admin_name)
-            fetch('http://localhost:8000/admin/show_appo/',{method:'POST',body:formData1,})
+            fetch('http://localhost:8000/admin/show_appo/',{method:'POST',headers:{'X-CSRFToken': csrfToken,} ,body:formData1,})
                 .then(response => response.json())
                 .then(data => setbookedappo(data))
                 .catch(error => console.error('Error fetching images:', error)); 
             setbookedForm(true)    
         };
 
-        const [selectedAppointment, setSelectedAppointment] = useState(null); // Track the clicked appointment
+        const [selectedAppointment, setSelectedAppointment] = useState(null);
         const [formData, setFormData] = useState({
-            admin:admin_name,
+            admin:admin_name || "",
             Water_Percentage : "",
             Air_Percentage : '',
             sand: '',
@@ -47,16 +47,14 @@ function ADMIN_APPO(){
             Potassium_Content : '',
         });
 
-        // Handle button click to show form
         const handleInsertData = (appointment) => {
             setSelectedAppointment(appointment);
             setFormData((prevData) => ({
                 ...appointment,
-                admin: admin_name // Ensure the admin name is always set
+                admin: admin_name,
             }));
         };
 
-        // Handle form input change
         const handleChange = (e) => {
             const { name, value } = e.target;
             setFormData((prevData) => ({
@@ -75,9 +73,9 @@ function ADMIN_APPO(){
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
-                    'X-CSRFToken': csrfToken,  // Ensure the CSRF token is passed
+                    'X-CSRFToken': csrfToken,
                 },
-                body: JSON.stringify(formData),  // Convert form data to JSON
+                body: JSON.stringify(formData),
             })
             .then(response => {
                 if (!response.ok) {
@@ -91,7 +89,7 @@ function ADMIN_APPO(){
             })
             .catch(error => console.error('Error during submission:', error));
             setFormData({
-                admin:admin_name,
+                admin:admin_name || "",
                 Water_Percentage : "",
                 Air_Percentage : '',
                 sand: '',
@@ -104,12 +102,11 @@ function ADMIN_APPO(){
                 Potassium_Content : '',
             });
         };
-        console.log(insert_data)
 
         const handleCancel = () => {
             setSelectedAppointment(null);
             setFormData({
-                admin:admin_name,
+                admin:admin_name || "",
                 Water_Percentage : "",
                 Air_Percentage : '',
                 sand: '',

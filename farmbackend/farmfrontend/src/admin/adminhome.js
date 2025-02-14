@@ -77,16 +77,14 @@ function ADMIN_HOME(){
     useEffect(() => {
         const interval = setInterval(() => {
             goToNext();
-        }, 2000); // 2000 milliseconds = 2 seconds
+        }, 2000);
 
-        // Cleanup interval on component unmount
         return () => clearInterval(interval);
     }, [currentIndex]);
 
     const [inView, setInView] = useState(false);
     const statsRef = useRef(null);
 
-    // This hook will detect if the stats section is in view
     useEffect(() => {
         const observer = new IntersectionObserver((entries) => {
             entries.forEach(entry => {

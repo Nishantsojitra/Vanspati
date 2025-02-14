@@ -8,15 +8,14 @@ function ADMIN_NAVBAR(){
     const query = new URLSearchParams(useLocation().search);
     const username = query.get('username');
     const email = query.get('email');
-    console.log(username,email)
     return(
         <>
             <nav className="navbar">
-                <div class="brand-title">
+                <div className="brand-title">
                     <img src={logo} alt="Brand Logo"/>
                 </div>
                 <input type="checkbox" id="menu-toggle"/>
-                <label for="menu-toggle" className="menu-icon">
+                <label htmlFor="menu-toggle" className="menu-icon">
                     <span className="bar"></span>
                     <span className="bar"></span>
                     <span className="bar"></span>
