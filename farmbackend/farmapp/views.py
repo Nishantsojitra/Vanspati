@@ -535,12 +535,3 @@ def delete_appointment(request, user_name, admin_name, appointment_date):
             return JsonResponse({'error': 'Appointment not found'}, status=404)
     else:
         return JsonResponse({'error': 'Invalid request method'}, status=400)    
-
-@csrf_exempt  
-def get_crop_buying_info(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        try:
-            pass
-        except:
-            pass     
