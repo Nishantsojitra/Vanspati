@@ -237,7 +237,7 @@ function CROP_DI() {
                             <tbody>
                                 <tr>
                                     <td><strong>Disease</strong></td>
-                                    <td>{cropData.name}</td>
+                                    <td>{cropData.disease}</td>
                                 </tr>
                                 <tr>
                                     <td><strong>Cause</strong></td>
@@ -356,9 +356,9 @@ function CROP_DI() {
                             <tbody>
                                 {recommendations.map((rec, index) => (
                                     <tr key={index}>
-                                        <td className="td1234">{rec.recommended_crop}</td>
+                                        <td className="td1234">{rec.recommendedCrop}</td>
                                         <td className="td1234">{rec.reason}</td>
-                                        <td className="td1234">{rec.soil_preparation}</td>
+                                        <td className="td1234">{rec.soilPreparation}</td>
                                     </tr>
                                 ))}
                             </tbody>

@@ -48,6 +48,7 @@ function PRODUCT() {
     // Add item to cart
     const addToCart = (name, price, category) => {
         setCartItems(prevItems => [...prevItems, { name, price, category }]);
+        alert(`${name} has been added to the cart.`);
     };
 
     // Calculate total price
@@ -58,6 +59,7 @@ function PRODUCT() {
     // Clear the cart
     const clearCart = () => {
         setCartItems([]);
+        alert("Cart has been cleared.");
     };
 
     // Handle form input changes
@@ -87,6 +89,7 @@ function PRODUCT() {
             .then(response => response.json())
             .then(data => {
                 console.log("Purchase successful", data);
+                alert("Purchase successful! Your order has been placed.");
                 clearCart();
                 setShowBuyOptions(false);
             })
@@ -195,7 +198,7 @@ function PRODUCT() {
                     <h2>Your Cart</h2>
                     {cartItems.length > 0 ? (
                         <>
-                            <table className="cart-table">
+                            <table className="cart-table" style={{ width: '80%', marginTop: '20px' }}>
                                 <thead>
                                     <tr>
                                         <th>Product Name</th>
@@ -213,7 +216,7 @@ function PRODUCT() {
                                     ))}
                                 </tbody>
                             </table>
-                            <div>Total Bill: ₹ {calculateTotal()}</div>
+                            <div style={{marginTop: '20px'}}>Total Bill: ₹ {calculateTotal()}</div>
                             <button onClick={clearCart} className="clear-cart-button">Clear Cart</button>
                         </>
                     ) : (

@@ -103,6 +103,7 @@ function UP_IMG() {
         .then(response => response.json())
         .then(data => {
             console.log("Product uploaded successfully:", data);
+            alert("Product uploaded successfully!");
         })
         .catch(error => {
             console.error("There was an error uploading the image!", error);

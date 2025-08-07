@@ -10,9 +10,11 @@ import os
 import google.generativeai as genai
 import tempfile
 from datetime import datetime
+from dotenv import load_dotenv
 
-
-GEMINI_API_KEY='AIzaSyC8tJwh5taOMMwImn0JiA35pu_Uf-rFSlE'
+load_dotenv()
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+# print("GEMINI_API_KEY:",GEMINI_API_KEY)
 
 @csrf_exempt
 def signup(request):
@@ -185,8 +187,7 @@ def soil_test(request):
     if request.method == 'POST':
         try:
             data = json.loads(request.body)
-            print(data)
-
+            print(data.get('user_name'))
             user_name = data.get('user_name')
             admin_name = data.get('admin')
             date = data.get('date')
@@ -224,7 +225,7 @@ def soil_test(request):
             }
 
             model = genai.GenerativeModel(
-                model_name="gemini-1.5-pro",
+                model_name="gemini-1.5-flash",
                 generation_config=generation_config,
                 system_instruction="""
                 You are a soil tester. 
@@ -248,7 +249,6 @@ def soil_test(request):
             recommended_crop = response_json['recommended_crop']
             nutrients_needed = response_json['nutrients_needed']
             other_suggestions = response_json['other_suggestions']
-
             APPOINTMENT_DETAILS.objects.create(
                 admin_name=admin_name,
                 user_name=user_name,
@@ -318,7 +318,7 @@ def upload_crop_photo(request):
                 "response_mime_type": "application/json",
             }
             model = genai.GenerativeModel(
-                model_name="gemini-1.5-pro",
+                model_name="gemini-1.5-flash",
                 generation_config=generation_config,
                 system_instruction=(
                     "You are a crops disease specialist. I will give you a photo of plant leaves "
@@ -359,7 +359,7 @@ def get_ideal_crop(request):
             }
 
             model = genai.GenerativeModel(
-                model_name="gemini-1.5-pro",
+                model_name="gemini-1.5-flash",
                 generation_config=generation_config,
                 system_instruction=(
                     "You are a specialist in recommending ideal crops. "

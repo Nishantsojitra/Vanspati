@@ -40,7 +40,6 @@ urlpatterns = [
     path('api/get-crop-info/', views.get_crop_info),
     path('api/buy/', views.buy_product),
     path('api/get-weather-info/',views.get_weather_info),
-    path('api/crop-buying-info/',views.get_crop_buying_info),
     path('api/delete_appo/<str:user_name>/<str:admin_name>/<str:appointment_date>/', views.delete_appointment),
 ]
 if settings.DEBUG:
