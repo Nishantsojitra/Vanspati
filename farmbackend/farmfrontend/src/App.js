@@ -20,13 +20,13 @@ function App() {
         <Route path="/signup" element={<SIGNUP />} />
         <Route path="/home" element={<HOME />} />
         <Route path="/" element={<LOGIN />} />
-        <Route path="/product" element={<PRODUCT />} />
+        {/* <Route path="/product" element={<PRODUCT />} /> */}
         <Route path="/appointment" element={<APPO />} />
         <Route path="/admin/" element={<LOGIN1 />} />
         <Route path="/admin/signup" element={<SIGNUP1 />} />
         <Route path="/admin/home" element={<ADMIN_HOME />} />
         <Route path="/admin/appointment" element={<ADMIN_APPO />} />
-        <Route path="/admin/product" element={<UP_IMG />} />
+        {/* <Route path="/admin/product" element={<UP_IMG />} /> */}
         <Route path="/crops_disease" element={<CROP_DI />} />
       </Routes>
     </Router>
